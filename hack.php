@@ -88,9 +88,16 @@ class StorageController extends Controller
     }
 
     public function deleteFile(Request $request){
-
         // $result = rmdir( storage_path('/app/UserUpload/'.auth()->id().'/'.$request->directory));
-        File::deleteDirectory(storage_path('/app/UserUpload/'.auth()->id().'/'.$request->directory));       
+
+        if( is_dir(storage_path('/app/UserUpload/'.auth()->id().'/'.$request->directory))){
+            File::deleteDirectory(storage_path('/app/UserUpload/'.auth()->id().'/'.$request->directory));  
+        }
+        else {
+            unlink( storage_path('/app/UserUpload/'.auth()->id().'/'.$request->directory));
+        }
+        // File::deleteDirectory(storage_path('/app/UserUpload/'.auth()->id().'/'.$request->directory));    
+
         return response()->json(["message"=> "File Deleted!" , "result" => $request ]);
     }
 
